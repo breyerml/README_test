@@ -1,13 +1,11 @@
 # README_test
 
-linear: $\vec{u}^T$ $\cdot$ $\vec{v}$
+$\vec{u}^T$ $\cdot$ $\vec{v}$
 
 $(\gamma$ $\cdot$ $\vec{u}^T$ $\cdot$ $\vec{v}$ $+$ $coef0)^{d}$
 
-$(\gamma \cdot u^T \cdot v + coef0)^{d}$
+$\exp(-\gamma$ $\cdot$ $|\vec{u}$ $-$ $\vec{v}|^2)$
 
-$\exp(-\gamma \cdot |\vec{u}$ $-$ $\vec{v}|^2)$
+$\tanh(\gamma$ $\cdot$ $\vec{u}^T$ $\cdot$ $\vec{v}$ $+$ $coef0)$
 
-$\tanh(\gamma \cdot \vec{u}^T$ $\cdot$ $\vec{v} + coef0)$
-
-$\exp(-\gamma \cdot |\vec{u}$ $-$ $\vec{v}|_1)$
+$\exp(-\gamma$ $\cdot$ $|\vec{u}$ $-$ $\vec{v}|_1)$
