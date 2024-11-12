@@ -41,5 +41,5 @@ jobs:
           git clone https://github.com/SC-SGS/PLSSVM.git PLSSVM
           cd PLSSVM
           git checkout format
-          cmake --preset all -DPLSSVM_TARGET_PLATFORM="cpu" 
+          cmake --preset all -DPLSSVM_TARGET_PLATFORMS="cpu" 
           cmake --build --preset all --target check-clang-format
