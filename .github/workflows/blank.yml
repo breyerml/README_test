@@ -46,5 +46,17 @@ jobs:
       - name: Check Formatting
         run: |
           cd PLSSVM
-          cmake --build --preset all --target clang-format
           cmake --build --preset all --target check-clang-format
+          status=$?
+          if [ $status -ne 0 ]; then
+            echo "Formatting errors found!"
+            cmake --build --preset all --target clang-format > clang-format-patch 2>&1
+          else
+            echo "No formatting errors found!"
+          fi
+          
+      - uses: actions/upload-artifact@v4
+        with:
+          name: clang-format-patch
+          path: PLSSVM/clang-format-patch.txt
+          if-no-files-found: ignore
