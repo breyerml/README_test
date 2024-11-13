@@ -38,9 +38,9 @@ jobs:
 
       - name: Format test
         run: |
-          git clone https://github.com/constracktor/PLSSVM.git
+          git clone https://github.com/SC-SGS/PLSSVM.git
           cd PLSSVM
-          git checkout hpx_start
+          git checkout develop
           cmake --preset all -DPLSSVM_TARGET_PLATFORMS="cpu" -DPLSSVM_ENABLE_FORMATTING=ON
 
       - name: Check Formatting
