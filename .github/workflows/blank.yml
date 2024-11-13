@@ -42,5 +42,9 @@ jobs:
           cd PLSSVM
           git checkout develop
           cmake --preset all -DPLSSVM_TARGET_PLATFORMS="cpu" -DPLSSVM_ENABLE_FORMATTING=ON
+
+      - name: Check Formatting
+        run: |
+          cd PLSSVM
           cmake --build --preset all --target clang-format
           cmake --build --preset all --target check-clang-format
