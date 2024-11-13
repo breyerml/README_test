@@ -44,6 +44,7 @@ jobs:
           cmake --preset all -DPLSSVM_TARGET_PLATFORMS="cpu" -DPLSSVM_ENABLE_FORMATTING=ON
 
       - name: Check Formatting
+        continue-on-error: true
         run: |
           cd PLSSVM
           cmake --build --preset all --target check-clang-format
@@ -51,6 +52,7 @@ jobs:
           if [ $status -ne 0 ]; then
             echo "Formatting errors found!"
             cmake --build --preset all --target clang-format > clang-format-patch 2>&1
+            exit $status
           else
             echo "No formatting errors found!"
           fi
