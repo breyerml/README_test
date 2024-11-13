@@ -51,8 +51,7 @@ jobs:
           status=$?
           if [ $status -ne 0 ]; then
             echo "Formatting errors found!"
-            cmake --build --preset all --target clang-format > clang-format-patch 2>&1
-            ls 
+            cmake --build --preset all --target clang-format > clang-format-patch.txt 2>&1
             exit $status
           else
             echo "No formatting errors found!"
