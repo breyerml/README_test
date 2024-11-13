@@ -43,3 +43,4 @@ jobs:
           git checkout hpx_start
           cmake --preset all -DPLSSVM_TARGET_PLATFORMS="cpu" -DPLSSVM_ENABLE_FORMATTING=ON
           cmake --build --preset all --target clang-format
+          cmake --build --preset all --target check-clang-format
