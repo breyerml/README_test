@@ -25,6 +25,11 @@ jobs:
           python3 -m pip install -U pip
           pip install argparse scikit-learn humanize --break-system-packages
           python3 -c "import sklearn; print(sklearn.__version__)"
+          echo $(which python3)
+      - name: "Set PYTHONPATH"
+        run: |
+          export PYTHONPATH=$(python3 -c "import site; print(site.getsitepackages()[0])")
+          echo "PYTHONPATH=$PYTHONPATH" >> $GITHUB_ENV
       - name: "Configure PLSSVM using CMake"
         run: |
           git clone https://github.com/SC-SGS/PLSSVM.git
