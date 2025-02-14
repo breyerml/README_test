@@ -22,7 +22,9 @@ jobs:
           brew install libomp
       - name: "Install Python dependencies"
         run: |
-          python3 -m pip install argparse scikit-learn humanize --break-system-packages
+          python3 -m pip install -U pip
+          pip install argparse scikit-learn humanize --break-system-packages
+          python3 -c "import sklearn; print(sklearn.__version__)"
       - name: "Configure PLSSVM using CMake"
         run: |
           git clone https://github.com/SC-SGS/PLSSVM.git
