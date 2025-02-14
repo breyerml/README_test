@@ -1,66 +1,47 @@
-# This is a basic workflow to help you get started with Actions
-
-name: format
-
-# Controls when the workflow will run
+name: macOS CPU
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+  push:
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-24.04
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
+  macOS-Test:
+    runs-on: macos-13
+    strategy:
+      matrix:
+        build_type: [Debug, Release]
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v4
-
-      # Runs a single command using the runners shell
-      - name: install clang-format
-        run: |
-          sudo apt install libomp-dev clang-format
-          
-
-      # Runs a set of commands using the runners shell
-      - name: Check version
-        run: |
-          clang-format --version
-
-      - name: Format test
-        run: |
-          git clone https://github.com/constracktor/PLSSVM.git
-          cd PLSSVM
-          git checkout hpx_start
-          cmake --preset all -DPLSSVM_TARGET_PLATFORMS="cpu" -DPLSSVM_ENABLE_FORMATTING=ON
-
-      - name: Check Formatting
-        run: |
-          set +e
-          cd PLSSVM
-          cmake --build --preset all --target check-clang-format
-          status=$?
-          if [ $status -ne 0 ]; then
-            echo "Formatting errors found!"
-            cmake --build --preset all --target clang-format > clang-format-patch.txt 2>&1
-            exit $status
-          else
-            echo "No formatting errors found!"
-          fi
-          
-      - name: Upload Patch
-        if: always()
-        uses: actions/upload-artifact@v4
+      - name: "Install cmake 3.31.0"
+        uses: lukka/get-cmake@v3.31.0
+      - name: "Install LLVM and Clang"
+        uses: KyleMayes/install-llvm-action@v2
         with:
-          name: clang-format-patch
-          path: PLSSVM/clang-format-patch.txt
-          if-no-files-found: ignore
+          version: "15.0"
+      - name: "Install dependencies via brew"
+        run: |
+          brew install python3
+          brew install numpy
+          brew install libomp
+      - name: "Install Python dependencies"
+        run: |
+          python3 -m pip install argparse scikit-learn humanize --break-system-packages
+      - name: "Configure PLSSVM using CMake"
+        run: |
+          git clone https://github.com/SC-SGS/PLSSVM.git
+          cd PLSSVM
+          git checkout regression
+          export LDFLAGS="-L/opt/homebrew/opt/libomp/lib"
+          export CPPFLAGS="-I/opt/homebrew/opt/libomp/include"
+          cmake --preset openmp_test -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DPLSSVM_TARGET_PLATFORMS="cpu" -DPLSSVM_ENABLE_LANGUAGE_BINDINGS=ON -DPLSSVM_ENABLE_PERFORMANCE_TRACKING=ON -DPLSSVM_TEST_FILE_NUM_DATA_POINTS=50 -DPLSSVM_TEST_FILE_NUM_FEATURES=20 -DPLSSVM_ENABLE_LTO=OFF
+      - name: "Build PLSSVM"
+        shell: bash
+        run: |
+          cd PLSSVM
+          export LDFLAGS="-L/opt/homebrew/opt/libomp/lib"
+          export CPPFLAGS="-I/opt/homebrew/opt/libomp/include"
+          cmake --build --preset openmp_test --config ${{ matrix.build_type }}
+          echo "${GITHUB_WORKSPACE}/PLSSVM/build" >> $GITHUB_PATH
+      - name: "Run tests"
+        run: |
+          cd PLSSVM
+          export LDFLAGS="-L/opt/homebrew/opt/libomp/lib"
+          export CPPFLAGS="-I/opt/homebrew/opt/libomp/include"
+          ctest --preset openmp_test -C ${{ matrix.build_type }} -E ".*executable.*" --parallel 2
