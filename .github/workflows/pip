@@ -1,0 +1,39 @@
+name: pip CPU
+on:
+  workflow_dispatch:
+  push:
+jobs:
+  pip-Test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Update system"
+        run: |
+          sudo apt update
+          sudo apt upgrade
+          sudo apt autoremove
+      - name: "Install g++"
+        run: |
+          sudo apt install g++
+          g++ --version
+      - name: "Set up Python"
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: "Create and activate virtual environment"
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          echo "VIRTUAL_ENV=$VIRTUAL_ENV" >> $GITHUB_ENV
+      - name: "Download PLSSVM"
+        run: |
+          git clone https://github.com/SC-SGS/PLSSVM.git
+      - name: "Install Python dependencies"
+        run: |
+          source $VIRTUAL_ENV/bin/activate
+          pip install --upgrade pip
+          pip install -r PLSSVM/install/python_requirements.txt
+      - name: "Build PLSSVM locally via pip"
+        run: |
+          cd PLSSVM
+          source $VIRTUAL_ENV/bin/activate
+          pip install .
