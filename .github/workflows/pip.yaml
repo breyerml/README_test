@@ -44,7 +44,21 @@ jobs:
           MPLBACKEND: Agg
         run: |
           source $VIRTUAL_ENV/bin/activate
-          cd PLSSVM
-          python examples/python/sklearn_like_svc.py
-          python examples/python/sklearn_like_svr.py
-          ls 
+          cd PLSSVM/examples/python
+          python sklearn_like_svc.py
+          python sklearn_like_svr.py
+          cd sklearn
+          python plot_classifier_comparison.py
+          python plot_decision_boundaries_via_coef_and_intercept.py
+          python plot_decision_boundary_confidence.py
+          python plot_different_classifiers.py
+          python plot_digits_classification.py
+          python plot_face_recognition.py
+          python plot_feature_discretization.py
+          python plot_rbf_parameters.py
+          python plot_rbf_parameters_3_classes.py
+          python plot_separating_hyperplane.py
+          python plot_svm_anova.py
+          python plot_svm_kernels.py
+          python plot_svm_margin.py
+          python plot_svm_regression.py
