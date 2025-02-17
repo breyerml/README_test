@@ -19,14 +19,16 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+      - name: "Download PLSSVM"
+        run: |
+          git clone https://github.com/SC-SGS/PLSSVM.git
+          cd PLSSVM
+          git checkout regression
       - name: "Create and activate virtual environment"
         run: |
           python -m venv venv
           source venv/bin/activate
           echo "VIRTUAL_ENV=$VIRTUAL_ENV" >> $GITHUB_ENV
-      - name: "Download PLSSVM"
-        run: |
-          git clone https://github.com/SC-SGS/PLSSVM.git
       - name: "Install Python dependencies"
         run: |
           source $VIRTUAL_ENV/bin/activate
@@ -34,6 +36,6 @@ jobs:
           pip install -r PLSSVM/install/python_requirements.txt
       - name: "Build PLSSVM locally via pip"
         run: |
-          cd PLSSVM
           source $VIRTUAL_ENV/bin/activate
+          cd PLSSVM
           pip install .
