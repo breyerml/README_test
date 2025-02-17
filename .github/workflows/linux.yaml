@@ -26,6 +26,7 @@ jobs:
         if: ${{ matrix.compiler }} == "clang++"
         run: |
           sudo apt install clang
+          sudo apt install libomp-dev
           clang++ --version
       - name: "Download PLSSVM"
         run: |
