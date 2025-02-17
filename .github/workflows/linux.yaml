@@ -18,12 +18,12 @@ jobs:
           sudo apt upgrade
           sudo apt autoremove
       - name: "Install Compiler"
-        if: matrix.compiler == "g++"
+        if: ${{ matrix.compiler == "g++" }}
         run: |
           sudo apt install g++
           g++ --version
       - name: "Install clang++"
-        if: matrix.compiler == "clang++"
+        if: ${{ matrix.compiler == "clang++" }}
         run: |
           sudo apt install clang
           clang++ --version
