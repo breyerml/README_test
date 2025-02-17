@@ -47,6 +47,7 @@ jobs:
           cd PLSSVM/examples/python
           python sklearn_like_svc.py
           python sklearn_like_svr.py
+          python main_classification.py
           cd sklearn
           python plot_classifier_comparison.py
           python plot_decision_boundaries_via_coef_and_intercept.py
