@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   push:
 jobs:
-  macOS-Test:
+  Linux-Test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -17,14 +17,16 @@ jobs:
           sudo apt update
           sudo apt upgrade
           sudo apt autoremove
-      - name: "Install g++"
-        if: ${{ matrix.compiler }} == "g++"
+      - name: "Install Compiler"
+        if: matrix.compiler == "g++"
         run: |
           sudo apt install g++
+          g++ --version
       - name: "Install clang++"
-        if: ${{ matrix.compiler }} == "clang++"
+        if: matrix.compiler == "clang++"
         run: |
-          sudo apt install clang++
+          sudo apt install clang
+          clang++ --version
       - name: "Download PLSSVM"
         run: |
           git clone https://github.com/SC-SGS/PLSSVM.git
