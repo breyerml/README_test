@@ -44,6 +44,7 @@ jobs:
           MPLBACKEND: Agg
         run: |
           source $VIRTUAL_ENV/bin/activate
+          cd PLSSVM
           python examples/python/sklearn_like_svc.py
           python examples/python/sklearn_like_svr.py
           ls 
